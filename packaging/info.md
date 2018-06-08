@@ -6,3 +6,4 @@ It's very easy to make some words **bold** and other words *italic* with Markdow
 ### [What's new](./docs/new.md)
 ### [How it works](./docs/works.md)
 
+### [How it works2](./docs/works.md)
