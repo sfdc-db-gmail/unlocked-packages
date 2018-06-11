@@ -1,4 +1,3 @@
-# Indroduction
+# FAQ on Managed Second-generation Packages (ISV partners)
 
-Packaging 2 is Salesforce's next generation packaging solution that enbles
-customers to be more agile in their approach to application development... 
+(Click [here](../intro.md) to go back to the main page)
