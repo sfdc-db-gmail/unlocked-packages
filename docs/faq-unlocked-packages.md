@@ -44,7 +44,7 @@ The following are some key benefits of packaging:
 What are the different types of packages and which one should I use?
 </h2>
 
-See [here](faq-packages.md#types-of-packages) for the answer.
+See [here](./faq-packages.md/#types-of-packages) for the answer.
 
 <h2 id="hello-world">
 How do I build and deploy a new app using unlocked packages? What’s my Hello World App for unlocked packages?
