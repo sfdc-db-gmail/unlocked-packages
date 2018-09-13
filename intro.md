@@ -1,7 +1,7 @@
 # Deploying Salesforce Metadata using Packaging
 
 ## Overview
-Packaging is one of the core products of the Salesforce DX product suite. Packaging enables the deployment and distribution of Metadata to different Salesforce instances and plays a key role in the Application Lifecycle Management.
+Packaging is one of the core products of the Salesforce DX product suite. Packaging enables the organization, deployment and distribution of Metadata to different Salesforce instances and plays a key role in the Application Lifecycle Management.
 
 Depending on your interest, please visit the following pages to access more info about Salesforce Packaging.
 1. [Useful Info to get started with Packaging](./docs/info.md)
