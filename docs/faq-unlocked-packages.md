@@ -58,9 +58,10 @@ Follow these simple steps and you have for yourself a package!
 
 
 1. Set up a directory on your local machine and copy the sample repo. Let’s presume this is the app that your team is building for meeting a business need.
-```git clone https://github.com/dreamhouseapp/dreamhouse-sfdx.git```  
-```cd dreamhouse-sfdx/```  
-```git checkout spring18```
+   
+    ```git clone https://github.com/dreamhouseapp/dreamhouse-sfdx.git```  
+
+    ```cd dreamhouse-sfdx/```  
 
     (If you want more info about the DreamHouse app, see here)
 
@@ -69,12 +70,12 @@ Follow these simple steps and you have for yourself a package!
 ```sfdx force:auth:web:login --setdefaultdevhubusername```
 
 
-3. Create a Developer-Controlled Package.  
-```sfdx force:package:create --name Dreamhouse-App --packagetype Unlocked --path force-app/ ```  
+3. Create a new unlocked package.  
+```sfdx force:package:create --name Dreamhouse-App --packagetype Unlocked --path force-app --nonamespace```  
 Note how the sfdx-project.json is automatically updated with information about this package.
 
 
-4. Create a package version. When you create a package version, you are associating metadata with your package. Over the course of time, you create many, many package versions for a given DCP. Once created, a package version serves as an immutable artifact containing a specific set of metadata. This is the same metadata that you specify at the package version creation step.   
+4. Create a package version. When you create a package version, you are associating metadata with your package. Over the course of time, you create many, many package versions for a given package. Once created, a package version serves as an immutable artifact containing a specific set of metadata. This is the same metadata that you specify at the package version creation step.   
 ```sfdx force:package:version:create --package Dreamhouse-app --installationkey mypkgisnowsecure#%^ --wait 20```
 
     In this example, force-app is the directory in which your package metadata is located in Salesforce DX format. The other pieces of information needed for package version creation are stored in sfdx-project.json.
@@ -85,7 +86,8 @@ Note how the sfdx-project.json is automatically updated with information about t
 
 
 6. Install the package in the scratch org.  
-```sfdx force:package:install --package Dreamhouse-app@0.1.0-1 --wait 10```  
+```sfdx force:package:install --package Dreamhouse-app@0.1.0-1 --publishwait 20 --wait 10```  
+
 If `Dreamhouse-app@0.1.0-1` is not the alias for the package version created in step 4, update the value for the `--package` flag with the correct alias.
 
 
@@ -96,10 +98,10 @@ If `Dreamhouse-app@0.1.0-1` is not the alias for the package version created in 
 8. In the scratch org, go to Setup -> Installed Packages, where you can see that the package has been installed.
 
 
-9. Click the Package Name and the View Components button to validate that the components present in the project are now deployed as part of the DCP.
+9. Click the Package Name and the View Components button to validate that the components present in the project are now deployed as part of the package.
 
 
-Congratulations! You have now created and installed your first DCP!
+Congratulations! You have now created and installed your first unlocked package!
 
 
 <h3 id="organize-md">
@@ -107,31 +109,31 @@ Q. How can I organize my unpackaged metadata using DCP?
 </h3>
 **Step 1** - Extract a small set of unpackaged, self-contained metadata from your production org and convert it to Salesforce DX format using mdapi:retrieve and mdapi:convert commands.
 
-How to identify this set of self-contained metadata is a bit of a science and a bit of an art. You can try and select metadata that represents an app, or customization to an AppExchange app, or customizations to Sales Cloud or an Account object, or some set of metadata that represents a functional unit (e.g.: a library of apex classes). We know this is a challenging task. We plan to produce material to help in this. See this blog series that talks about DX and DCPs.
+How to identify this set of self-contained metadata is a bit of a science and a bit of an art. You can try and select metadata that represents an app, or customization to an AppExchange app, or customizations to Sales Cloud or an Account object, or some set of metadata that represents a functional unit (e.g.: a library of apex classes). We know this is a challenging task. We plan to produce material to help in this. See this [blog](https://developer.salesforce.com/blogs/2018/02/getting-started-salesforce-dx-part-1-5.html) series that talks about DX and unlocked packages.
 
-**Step 2** - Push this metadata to a scratch org using source:push and validate that this is the metadata that you want to be part of a new DCP. If you are missing some metadata, go back to Step 1.
+**Step 2** - Push this metadata to a scratch org using source:push and validate that this is the metadata that you want to be part of a new package. If you are missing some metadata, go back to Step 1.
 
-**Step 3** - Create a DCP using this metadata (see here for how to create a DCP). Make sure this DCP has no namespace (supply the --nonamespace flag to the force:package2:create command). See here for more info about namespaces and packages.
+**Step 3** - Create an unlocked package using this metadata (see [here](#hello-world) for how to create a package). Make sure this package has no namespace (supply the --nonamespace flag to the force:package:create command). See here for more info about namespaces and packages.
 
-**Step 4** - Test the DCP in CI and UAT environments. If you encounter issues, you may have to go back to Step 1 and validate that you have the right set of metadata. Once the DCP has passed all CI runs and UAT on sandboxes, install the DCP in the production org. This installation does NOT deploy new metadata as what’s contained in the DCP is already present in the production org. But what this does is “migrate” the metadata from the unpackaged set to the DCP so that it is now part of the DCP in the production org. From this point forward, you can iterate over this metadata set using the DCP.
+**Step 4** - Test the package in CI and UAT environments. If you encounter issues, you may have to go back to Step 1 and validate that you have the right set of metadata. Once the package has passed all CI runs and UAT on sandboxes, install the package in the production org. This installation does NOT deploy new metadata as what’s contained in the package is already present in the production org. But what this does is “migrate” the metadata from the unpackaged set to the package so that it is now part of the package in the production org. From this point forward, you can iterate over this metadata set using the package.
 
-These steps, along with the specification of dependencies among DCPs, can help in organizing all of the unpackaged metadata into a set of interdependent DCPs.
+These steps, along with the specification of dependencies among packages, can help in organizing all of the unpackaged metadata into a set of interdependent packages.
 
 <h2 id="common-pkg-ops">
 Q. What are some of the common packaging operations?
 </h2>
 
 **Package Creation**  
-A package is a container of metadata. When you create a package, such as a DCP, you specify some characteristic info about the package: name, description, namespace associated with it, package type (unlocked for now), and so on. Associating metadata with a package occurs at the package version creation step.
+A package is a container of metadata. When you create a package, you specify some characteristic info about the package: name, description, metadata and namespace associated with it, package type and so on. 
 
 **Package Version Creation**  
-As your development team is working on some functionality, you, as a release manager, may want to take periodic snapshots of the functionality when it is in a functional state. Such snapshots are package versions. You can create any number of package versions. Each version, once created, is immutable.
+As your development team is working on some functionality, you, as a release manager, may want to take periodic snapshots of the functionality when it is in a functional state. Such snapshots are package versions. When the package version creation operation is executed, a copy of the current state of the metadata in the project folder (the directory specified in `force:package:create` command) is used to create the package version. You can create any number of package versions. Each version, once created, is immutable.
 
 **Package Install**  
-A package install is an operation whereby the metadata of a package is deployed in the target org. A package install is actually a package version install - it is the deployment of metadata contained in a specific package version of a package. A package is typically associated with 100s or even 1,000s of package versions. When you install a package, you specify which one of the many versions you intend to install. Install and deploy mean the same in this context.
+A package install is an operation whereby the metadata of a package is deployed to the target org. A package install is actually a package version install - it is the deployment of metadata contained in a specific package version of a package. A package is typically associated with 100s or even 1,000s of package versions. When you install a package, you specify which one of the many versions you intend to install. Install and deploy mean the same in this context.
 
 **Package Upgrade**  
-Installing a version on top of a previously installed package version is a package upgrade. When you perform a package upgrade, the metadata of the new package version is deployed to the org. The package upgrade process can add new metadata to the org, modify existing metadata, and may even delete some metadata depending on what’s there in the new version of the package.
+Installing a version on top of a previously installed package version is a package upgrade. When you perform a package upgrade, the metadata of the new package version is deployed to the org. The package upgrade process can add new metadata to the org, modify existing metadata, and may even delete and deprecate some metadata depending on what’s there in the new version of the package.
 
 **Package Downgrade**  
 See here for more info about package downgrades.
@@ -142,7 +144,7 @@ This is an operation where you are deleting the metadata and associated data rel
 See here for how you can perform these operations using the Salesforce CLI.
 
 <h2 id="simple-json">
-Q. How can I specify attributes in the sfdx-project.json file for managing my DCPs?
+Q. How can I specify attributes in the sfdx-project.json file for managing my packages?
 </h2>
 
 Some of the sfdx-project.json updates are done automatically for you. See here for more info. 
@@ -197,7 +199,6 @@ versionName (required field) and versionDescription (optional field) - name and 
 
 versionNumber  (required field) - version number in major.minor.patch.build format where each one of these is a whole number. See here for more info about package versions.
 
-features and orgPreferences - these are features and org preferences required for the metadata in the DCP. See here for more info.
 
 
 
