@@ -200,6 +200,63 @@ versionName (required field) and versionDescription (optional field) - name and 
 versionNumber  (required field) - version number in major.minor.patch.build format where each one of these is a whole number. See here for more info about package versions.
 
 
+<h2 id="supported-md">
+Q. What types of metadata are supported in an unlocked package?
+</h2>
+
+Most metadata that is supported by Salesforce DX is supported in unlocked packages. See [here](https://mdcoverage.secure.force.com) for more information.
+
+<h2 id="namespace">
+What is a namespace and should I use one with my unlocked package?
+</h2>
+
+A namespace is a unique identifier that is owned by your company when you register it with Salesforce. If you associate a namespace (like Acme) with a package (see here for how to associate namespaces with Dev Hub), the API names of all metadata added to the package will have the prefix Acme__. Hence, namespaces offer a mechanism to name and organize metadata in your org.
+
+
+Keep the following in mind when you think of namespaces and packages:
+
+1. Namespaces are optional for unlocked packages. There are many use cases where you won’t want to use namespaces with unlocked packages. If you intend to move your metadata from unpackaged state in your production org to unlocked packages (see here for more info), create packages without a namespace.
+2. A Salesforce DX Dev Hub can be linked to multiple namespaces so it’s possible for you to use different namespaces for different packages.
+3. Multiple packages can be associated with the same namespace.
+4. A package can be associated with only one namespace.
+5. A package can be associated with a namespace only during package creation (`force:package:create`) and cannot be changed, once associated.
+6. One of the known issues with namespaced unlocked packages is that the Apex in such a package is hidden and the experience associated with debug logs is sub-optimal. It is on the roadmap to fix this but the earliest that can happen in Summer '19.
+
+<h2 id="namespace">
+How do I iterate on my package? What happens when I add, edit and delete package metadata?
+</h2>
+
+Unlocked Packages provide a very open framework for making metadata changes. Before we talk about these changes, make sure you understand the difference between a package and a package version. See here for more info. Also take a look at [this](#common-pkg-ops) for packaging operations.
+
+
+Versioning is one of the core differentiating features of packaging. It is versioning that enables iterative development, where you can continually update an artifact (package) in a controlled and manageable way in response to business needs (feature requests and bug fixes).
+
+
+When it comes to versioning and changes introduced in versions, it is helpful to look at them from two angles - development stage and deployment stage.
+
+
+**Development and Build Stages**
+
+When you create a new package version, you can introduce the following changes in relation to a previous package version:
+
+1. Add new metadata to the project workspace, such as  a new Lightning Page or a new Apex Controller
+2. Modify existing package metadata, such as updating a business process in response to end-user feedback or updating an Apex method to fix a bug.
+3. Delete existing package metadata, such as deleting Visualforce pages as they are being replaced by Lightning Pages, deleting a custom field as it has become obsolete, etc.
+
+The above-described changes can be applied in a variety of ways (Setup UI in scratch orgs, in VS Code, in Developer Console, etc.) and ultimately make it to the version control system for the project (See here for relationship between version control system and packages). The release manager then pulls in the right set of metadata to the local workspace and creates a new package version so that the package version captures these changes.
+
+
+**Deployment Stage**
+
+Let’s presume you are trying to deploy (aka install) v 2.0 of a DCP in an environment where v 1.0 is currently installed. During this package upgrade process, the following changes are applied:
+
+1. Metadata that is new in v2.0 in comparison to v1.0 are deployed or created in the target org.
+2. Metadata that has changed are applied. For example, if a Lightning Page or Apex Controller has been modified in v2.0, those modifications are applied as part of package upgrade.
+3. When it comes to metadata delete - this is the scenario where something (custom field or report or apex class) present in v1.0 was deleted in v2.0 - there are two possible outcomes:
+   * For the first class of metadata types, the metadata is deleted from the target org.
+   * For the second class of metadata types, the metadata is marked as deprecated. When metadata is marked deprecated, it is still part of the package but it shows up as deprecated when you look at the metadata in Setup so that it is easier for admins to track and delete them from the org. We understand that this deletion of metadata in the installed org is a manual step that should be automated. In many scenarios, you may want the package upgrade process to automatically delete metadata that was removed from the package. We plan to make this process more automatable in future releases.
+
+
 
 
 
