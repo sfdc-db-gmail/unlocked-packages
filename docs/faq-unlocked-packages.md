@@ -2,7 +2,7 @@
 
 (Click [here](../intro.md) to go back to the main page)
 
-###Table of Contents
+### Table of Contents
 
 [What are Unlocked Packages?](#unlocked-pkgs)
 
@@ -10,6 +10,55 @@
 
 [What are the different types of packages and which one should I use?](#pkg-types)
 
+[How do I build and deploy a new app using unlocked packages? What’s my Hello World App for unlocked packages?](#hello-world)
+
+[Q. How can I organize my unpackaged metadata using unlocked packages?](#organize-md)
+
+[Q. What are some of the common packaging operations?](#common-pkg-ops)
+
+[Q. How can I specify attributes in the sfdx-project.json file for managing my packages?](#simple-json)
+
+[Q. What types of metadata are supported in an unlocked package?](#supported-md)
+
+[Q. What is a namespace and should I use one with my unlocked package?](#namespace)
+
+[Q. How do I iterate on my package? What happens when I add, edit and delete package metadata?](#pkg-upgrades)
+
+[Q. What are the implications of modifying or deleting metadata that is part of an unlocked package *directly* in the installed org?](#modify-md-installed-org)
+
+[Q. Who owns the unlocked packages?](#pkg-owner)
+
+[Q. How and where can I install my unlocked packages?](#pkg-instal)
+
+[Q. How can I find out about the set of packages installed / deployed in my org?](#installed-pkgs)
+
+[Q. How can I use Salesforce CLI to perform package-related operations?](#pkg-cli-ops)
+
+[Q. Can my packages depend on one another?](#pkg-deps)
+
+[Q. How can I specify dependencies among packages?](#specify-pkg-dep)
+
+[Q. Are package dependencies enforced during install time?](#pkg-dep-enforcement)
+
+[Q. Can you give me an example of an sfdx-project.json file with many interdependent packages?](#complex-pkg-deps)
+
+[Q. How can I delete my package and package versions?](#delete-pkg)
+
+[Q. How can I remove metadata from my package?](#remove-md)
+
+[Q. How do I work with Version Numbers?](#ver-num)
+
+[Q. What is the difference between beta package versions and released package versions?](#pkg-rel-state)
+
+[Q. What are Locked Packages? Can I use them?](#locked-pkgs)
+
+[Q. If I am an ISV, what type of packaging should I use?](#isv-packaging)
+
+[Q. Can I downgrade my package?](#downgrade-pkg)
+
+[Q. What is the relationship between version control system and packages?](#vcs)
+
+[Q. How can I get more info about Salesforce DX and Unlocked Packages?](#pkg-info)
 
 <h2 id="unlocked-pkgs">
 What are Unlocked Packages?
@@ -181,44 +230,40 @@ See this example below for a section of sfdx-project.json file
 
 (this deliberately avoids package dependencies to keep things simple. See here for a simple example of package dependencies and here for a more complex scenario)  
 
-``` "packageDirectories": [
+```
 
-       {
+{
+    "packageDirectories": [
 
-           "package": "revenue-app",
+        {
+            "package": "revenue-app",
+            "path": "common",
+            "default": true,
+            "versionNumber": "0.1.0.NEXT",
+            "versionName": "Summer 2018",
+            "versionDescription": "Summer 2018 Release",
+        },
 
-           "path": "common",
-
-           "default": true,
-
-           "versionNumber": "0.1.0.NEXT",
-
-           "versionName": "Summer 2018",
-
-           "versionDescription": "Summer 2018 Release",
-
-       },
-
-       {
-
-           "package": "revenue-app-utils",
-
-          …
-
-       }
-
-],
+        {
+            "package": "revenue-app-utils",
+            …
+        }
+        
+    ],
 
     "namespace": "",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "43.0",
+    "sourceApiVersion": "44.0",
 
 
-packageAliases {
-        "revenue-app": "0HoB00000008OoZKAU",
-        "revenue-app-utils": "0HoB00000008OoYMZD"
-    }
+    "packageAliases": {
+            "revenue-app": "0HoB00000008OoZKAU",
+            "revenue-app-utils": "0HoB00000008OoYMZD"
+        }
+}
+
 ```
+
 package (required field) - this is the package id that starts with 0Ho. The output of the force:package2:create command provides this ID.
 
 path (required field) - root folder where the source metadata of the package is stored in the local workspace in Salesforce DX format
@@ -250,7 +295,7 @@ Keep the following in mind when you think of namespaces and packages:
 5. A package can be associated with a namespace only during package creation (`force:package:create`) and cannot be changed, once associated.
 6. One of the known issues with namespaced unlocked packages is that the Apex in such a package is hidden and the experience associated with debug logs is sub-optimal. It is on the roadmap to fix this but the earliest that can happen in Summer '19.
 
-<h2 id="namespace">
+<h2 id="pkg-upgrades">
 Q. How do I iterate on my package? What happens when I add, edit and delete package metadata?
 </h2>
 
@@ -286,7 +331,7 @@ Let’s presume you are trying to deploy (aka install) v 2.0 of a DCP in an envi
 
 
 <h2 id="modify-md-installed-org">
-Q. What are the implications of modifying or deleting metadata that is part of an unlocked package *directly* in the installed org??
+Q. What are the implications of modifying or deleting metadata that is part of an unlocked package *directly* in the installed org?
 </h2>
 
 You have developed an unlocked package, taken it through all of the testing cycles - integration, user acceptance, etc. - and you are now ready to install it in your production org. One question that arises is, what happens if your admin has to make an emergency change to the metadata *directly* in the production org? For example, the admin might have noticed that some permission sets are granting too much access, a page layout is missing some critical fields, or a report is missing a key column. If this metadata is part of an unlocked package, should the admin contact the development team and take it through the full cycle of development, testing, UAT and then do the deployment? The answer is yes from a best practice of software development process perspective. But what if one or all of these changes need to be made *right now!*?
