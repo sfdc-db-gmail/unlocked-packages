@@ -1,4 +1,4 @@
-# FAQ on Unlocked Packages (Salesforce Customers and non-ISV partners)
+# FAQ on Unlocked Packages
 
 (Click [here](../intro.md) to go back to the main page)
 
@@ -60,7 +60,23 @@ Table of Contents
 
 [Q. What is the relationship between version control system and packages?](#vcs)
 
+[Q. What are package aliases and how do they work?](#pkg-alias)
+
 [Q. How can I get more info about Salesforce DX and Unlocked Packages?](#pkg-info)
+
+[Q. What are package aliases and how do they work?](#pkg-alias)
+
+[Q. What are "branch" and "tag" attributes in package version and how do they work?](#branch)
+
+[Q. During a package upgrade, how are destructive changes handled?](#delete-deprecate)
+
+[Q. How can I automatically install dependent packages?](#dep-pkg-install)
+
+[Q. How can I refactor my package?](#pkg-refactor)
+
+[Q. Will unlocked packages support ALL metadata in future?](#supported-md)
+
+[Q. How can I secure my packages?](#pkg-security)
 
 <h2 id="unlocked-pkgs">
 What are Unlocked Packages?
@@ -68,7 +84,7 @@ What are Unlocked Packages?
 
 As part of Salesforce DX, with the Winter '19 release, we offer **Unlocked Packages** as a Generally Available (GA) product. We’re bringing you, our enterprise customers and non-ISV partners (SIs and consultants), a new type of packaging solution, designed with you and your use cases in mind.
 
-Unlocked Packages offer a new mechanism for deploying  metadata to Salesforce orgs. We believe they provide distinct advantages over current technologies like Change Sets and the ANT Migration Tool (See [here](#benefits-of-packaging) for the benefits of unlocked packages over current technologies).
+Unlocked Packages offer a new mechanism for deploying  metadata to Salesforce orgs. We believe they provide distinct advantages over current technologies like Change Sets and the ANT Migration Tool (See [here](#pkg-benefits) for the benefits of unlocked packages over current technologies).
 
 Among other things, unlocked packages attempt to answer  two key questions:
 
@@ -199,7 +215,7 @@ How to identify this set of self-contained metadata is a bit of a science and a 
 
 **Step 2** - Push this metadata to a scratch org using source:push and validate that this is the metadata that you want to be part of a new package. If you are missing some metadata, go back to Step 1.
 
-**Step 3** - Create an unlocked package using this metadata (see [here](#hello-world) for how to create a package). Make sure this package has no namespace (supply the --nonamespace flag to the force:package:create command). See here for more info about namespaces and packages.
+**Step 3** - Create an unlocked package using this metadata (see [here](#hello-world) for how to create a package). Make sure this package has no namespace (supply the --nonamespace flag to the force:package:create command). See [here](#namespace) for more info about namespaces and packages.
 
 **Step 4** - Test the package in CI and UAT environments. If you encounter issues, you may have to go back to Step 1 and validate that you have the right set of metadata. Once the package has passed all CI runs and UAT on sandboxes, install the package in the production org. This installation does NOT deploy new metadata as what’s contained in the package is already present in the production org. But what this does is “migrate” the metadata from the unpackaged set to the package so that it is now part of the package in the production org. From this point forward, you can iterate over this metadata set using the package.
 
@@ -224,12 +240,12 @@ A package install is an operation whereby the metadata of a package is deployed 
 Installing a version on top of a previously installed package version is a package upgrade. When you perform a package upgrade, the metadata of the new package version is deployed to the org. The package upgrade process can add new metadata to the org, modify existing metadata, and may even delete and deprecate some metadata depending on what’s there in the new version of the package.
 
 **Package Downgrade**  
-See here for more info about package downgrades.
+See [here](#downgrade-pkg) for more info about package downgrades.
 
 **Package Uninstall**  
 This is an operation where you are deleting the metadata and associated data related to an installed package.
 
-See here for how you can perform these operations using the Salesforce CLI.
+See [here](#pkg-cli-ops) for how you can perform these operations using the Salesforce CLI.
 
 ([Back to the Table of Contents](#toc))
 
@@ -241,7 +257,7 @@ Some of the sfdx-project.json updates are done automatically for you. See here f
 
 See this example below for a section of sfdx-project.json file
 
-(this deliberately avoids package dependencies to keep things simple. See here for a simple example of package dependencies and here for a more complex scenario)  
+(this deliberately avoids package dependencies to keep things simple. See [here](#specify-pkg-dep) for a simple example of package dependencies and [here](#complex-pkg-deps) for a more complex scenario)  
 
 ```
 
@@ -283,7 +299,7 @@ path (required field) - root folder where the source metadata of the package is 
 
 versionName (required field) and versionDescription (optional field) - name and description of the package version that you’re creating.
 
-versionNumber  (required field) - version number in major.minor.patch.build format where each one of these is a whole number. See here for more info about package versions.
+versionNumber  (required field) - version number in major.minor.patch.build format where each one of these is a whole number. See [here](#ver-num) for more info about package version numbers.
 
 ([Back to the Table of Contents](#toc))
 
@@ -299,12 +315,12 @@ Most metadata that is supported by Salesforce DX is supported in unlocked packag
 Q. What is a namespace and should I use one with my unlocked package?
 </h2>
 
-A namespace is a unique identifier that is owned by your company when you register it with Salesforce. If you associate a namespace (like Acme) with a package (see here for how to associate namespaces with Dev Hub), the API names of all metadata added to the package will have the prefix Acme__. Hence, namespaces offer a mechanism to name and organize metadata in your org.
+A namespace is a unique identifier that is owned by your company when you register it with Salesforce. If you associate a namespace (like Acme) with a package (see [here](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_reg_namespace.htm) for how to associate namespaces with Dev Hub), the API names of all metadata added to the package will have the prefix Acme__. Hence, namespaces offer a mechanism to name and organize metadata in your org.
 
 
 Keep the following in mind when you think of namespaces and packages:
 
-1. Namespaces are optional for unlocked packages. There are many use cases where you won’t want to use namespaces with unlocked packages. If you intend to move your metadata from unpackaged state in your production org to unlocked packages (see here for more info), create packages without a namespace.
+1. Namespaces are optional for unlocked packages. There are many use cases where you won’t want to use namespaces with unlocked packages. If you intend to move your metadata from unpackaged state in your production org to unlocked packages (see [here](#organize-md) for more info), create packages without a namespace.
 2. A Salesforce DX Dev Hub can be linked to multiple namespaces so it’s possible for you to use different namespaces for different packages.
 3. Multiple packages can be associated with the same namespace.
 4. A package can be associated with only one namespace.
@@ -317,7 +333,7 @@ Keep the following in mind when you think of namespaces and packages:
 Q. How do I iterate on my package? What happens when I add, edit and delete package metadata?
 </h2>
 
-Unlocked Packages provide a very open framework for making metadata changes. Before we talk about these changes, make sure you understand the difference between a package and a package version. See here for more info. Also take a look at [this](#common-pkg-ops) for packaging operations.
+Unlocked Packages provide a very open framework for making metadata changes. Before we talk about these changes, make sure you understand the difference between a package and a package version. See [here](#unlocked-pkgs) for more info. Also take a look at [this](#common-pkg-ops) for packaging operations.
 
 
 Versioning is one of the core differentiating features of packaging. It is versioning that enables iterative development, where you can continually update an artifact (package) in a controlled and manageable way in response to business needs (feature requests and bug fixes).
@@ -334,7 +350,7 @@ When you create a new package version, you can introduce the following changes i
 2. Modify existing package metadata, such as updating a business process in response to end-user feedback or updating an Apex method to fix a bug.
 3. Delete existing package metadata, such as deleting Visualforce pages as they are being replaced by Lightning Pages, deleting a custom field as it has become obsolete, etc.
 
-The above-described changes can be applied in a variety of ways (Setup UI in scratch orgs, in VS Code, in Developer Console, etc.) and ultimately make it to the version control system for the project (See here for relationship between version control system and packages). The release manager then pulls in the right set of metadata to the local workspace and creates a new package version so that the package version captures these changes.
+The above-described changes can be applied in a variety of ways (Setup UI in scratch orgs, in VS Code, in Developer Console, etc.) and ultimately make it to the version control system for the project (See [here](#vcs) for relationship between version control system and packages). The release manager then pulls in the right set of metadata to the local workspace and creates a new package version so that the package version captures these changes.
 
 
 **Deployment Stage**
@@ -377,7 +393,7 @@ Please keep in mind the following about Dev Hub and unlocked package:
 Q. How and where can I install my unlocked packages?
 </h2>
 
-An unlocked package can be installed in any Salesforce environment - scratch orgs, sandbox orgs, trial orgs, and production orgs (see here for a note on beta vs released state of a package version).
+An unlocked package can be installed in any Salesforce environment - scratch orgs, sandbox orgs, trial orgs, and production orgs (see [here](#pkg-rel-state) for a note on beta vs released state of a package version).
 
 
 A package can be installed in two different ways:
@@ -392,7 +408,7 @@ By appending the following to the browser URL: packaging/installPackage.apexp?p0
 
 The 04t is the package version ID. This represents the version of the package to install. The 04t ID is returned when the `force:package:version:create`  CLI command returns successfully. You can use `force:package:version:list` command to get a list of package versions associated with a package.
 
-See here if you want to know more about different packaging operations.
+See [here](#common-pkg-ops) if you want to know more about different packaging operations.
 
 ([Back to the Table of Contents](#toc))
 
@@ -477,7 +493,7 @@ Keep the following in mind when you think of package dependencies:
 1. Multi-level dependencies are supported. E.g.: dcp-z can depend on dcp-y which in turn depends on dcp-x.
 2. A single package can depend on multiple unlocked packages and AppExchange packages.
 
-See here to see how you can express dependencies in `sfdx-project.json` and see here for a more advanced example.
+See [here](#specify-pkg-dep) to see how you can express dependencies in `sfdx-project.json` and see [here](#complex-pkg-deps) for a more advanced example.
 
 ([Back to the Table of Contents](#toc))
 
@@ -485,7 +501,7 @@ See here to see how you can express dependencies in `sfdx-project.json` and see 
 Q. How can I specify dependencies among packages?
 </h2>
 
-See here to know more about package dependencies.
+See [here](#pkg-deps) to know more about package dependencies.
 
 You express dependencies within the packageDirectories section of sfdx-project.json.
 
@@ -531,7 +547,7 @@ For a more complex scenario of package dependencies, please see here.
 Q. Are package dependencies enforced during install time?
 </h2>
 
-1. Package dependencies are used during development time. E.g.: if you are developing packages and if your apex class in package `pkg-y` is invoking another apex class that is present in package `pkg-x`, you should express that `pkg-y` depends on `pkg-x` for the package version creation of `pkg-y` to succeed. (See here for how to express these dependencies)
+1. Package dependencies are used during development time. E.g.: if you are developing packages and if your apex class in package `pkg-y` is invoking another apex class that is present in package `pkg-x`, you should express that `pkg-y` depends on `pkg-x` for the package version creation of `pkg-y` to succeed. (See [here](#specify-pkg-dep) for how to express these dependencies)
 
 2. Package dependencies are enforced at installation time.If `pkg-y` depends on `pkg-x`, you will have to install `pkg-x` before you can install `pkg-y`; otherwise the installation of `pkg-y` fails with an error message. Also, you have to ensure that the appropriate versions of the package are installed in the org. For E.g.: if `pkg-y` ver 4.0 has a Lightning Page that uses an apex controller from `pkg-x` ver 3.0, attempting to install `pkg-y` ver 4.0 fails in an org where `pkg-x` ver 2.0 is installed. 
 
@@ -541,7 +557,7 @@ Q. Are package dependencies enforced during install time?
 Q. Can you give me an example of an sfdx-project.json file with many interdependent packages?
 </h2>
 
-See here to know more about package dependencies. See here for a simple example of package dependencies.
+See [here](#pkg-deps) to know more about package dependencies. See [here](#specify-pkg-dep) for a simple example of package dependencies.
 
 Let’s consider the following scenario:
 
@@ -642,7 +658,7 @@ Q. How can I delete my package and package versions?
 
 It is currently **not** possible to delete package or package versions. In a future release, we will provide capabilities for the same. For now, you can rename them (using `force:package:update` and `force:package:version:update` Salesforce CLI commands) to denote that you are no longer using them.
 
-Click here for more info about packaging operations.
+Click [here](#common-pkg-ops) for more info about packaging operations.
 
 ([Back to the Table of Contents](#toc))
 
@@ -652,14 +668,14 @@ Q. How can I remove metadata from my package?
 
 If you want to delete some metadata from your pckage because you no longer need that metadata, then you can delete that metadata from your local workspace, create a new package version and install that version in the production org. That process will delete the metadata in the production org. There are some limitations with respect to what gets deleted. Please see here for more details.
 
-However, *remove* is different from *delete*. It refers to removing some metadata from a package because that metadata does not *naturally* belong to the package. You may want to make that metadata unpackaged OR you may want to make it part of another package. See here for how to *release* metadata from an unlocked package back to the unpackaged state and see here for how to *move* metadata from one package to another package.
+However, *remove* is different from *delete*. It refers to removing some metadata from a package because that metadata does not *naturally* belong to the package. You may want to make that metadata unpackaged OR you may want to make it part of another package. See [here](#pkg-rel-state) for how to *release* metadata from an unlocked package back to the unpackaged state and see here for how to *move* metadata from one package to another package.
 
 ([Back to the Table of Contents](#toc))
 
 <h2 id="ver-num">
 Q. How do I work with Version Numbers?
 </h2>
-A package version is an immutable artifact that is a snapshot of a package with a specific set of metadata. A package version is created with a successful execution of the `force:package:version:create` command. Every package version (see here for more info about package and package versions) you create has a unique version number. The version number is in the major.minor.patch.build number format where major, minor, patch and build are integers.
+A package version is an immutable artifact that is a snapshot of a package with a specific set of metadata. A package version is created with a successful execution of the `force:package:version:create` command. Every package version (see [here](#unlocked-pkgs) for more info about package and package versions) you create has a unique version number. The version number is in the major.minor.patch.build number format where major, minor, patch and build are integers.
 
 Here are some things to keep in mind with respect to version numbers:
 
@@ -684,7 +700,7 @@ As part of your development process, you end up creating lots and lots of packag
 
 A package version promoted to *released* state can be installed in any org.
 
-For a given major.minor.patch package version number (see here for more info about version numbers), there can be at most one package version in *released* state. Once you set a package version to released state, you cannot undo that operation.
+For a given major.minor.patch package version number (see [here](#ver-num) for more info about version numbers), there can be at most one package version in *released* state. Once you set a package version to released state, you cannot undo that operation.
 
 ([Back to the Table of Contents](#toc))
 
@@ -701,7 +717,7 @@ Unlocked Packages are Generally Available (GA) in Winter '19 and we recommend th
 Q. If I am an ISV, what type of packaging should I use?
 </h2>
 
-If you are an ISV that develops and lists apps on AppExchange, here are our recommendations (See here for info about different types of packages):
+If you are an ISV that develops and lists apps on AppExchange, here are our recommendations (See [here](#pkg-types) for info about different types of packages):
 
 1. Continue to use first-generation managed packages (1GPs) for now when it comes to listing and distributing apps to customers.
 2. In upcoming releases, we are working on enabling the listing of second-generation packages (managed 2GPs) on AppExchange and building feature parity with first-generation managed packages - features like LMA and push upgrades. Until we can develop these features and launch managed second-generation packages as GA, we recommend that you continue with first-gen packages.
@@ -732,6 +748,36 @@ When it comes to unlocked packages, the source of truth is your version control 
 2. Use version control system commits to tag the set of metadata that was associated with a particular successful package version creation. This way, your version control system knows the state of metadata for any given package version.
 
 ([Back to the Table of Contents](#toc))
+
+<h2 id="pkg-alias">
+Q. What are package aliases and how do they work?
+</h2>
+
+<h2 id="branch">
+Q. What are "branch" and "tag" attributes in package version and how do they work?
+</h2>
+
+<h2 id="delete-deprecate">
+Q. During a package upgrade, how are destructive changes handled?
+</h2>
+
+<h2 id="dep-pkg-install">
+Q. How can I automatically install dependent packages?
+</h2>
+
+<h2 id="pkg-refactor">
+Q. How can I refactor my package?
+</h2>
+
+<h2 id="supported-md">
+Q. Will unlocked packages support ALL metadata in future?
+</h2>
+
+<h2 id="pkg-security">
+Q. How can I secure my packages?
+</h2>
+
+
 
 <h2 id="pkg-info">
 Q. How can I get more info about Salesforce DX and Unlocked Packages?
