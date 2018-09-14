@@ -2,7 +2,14 @@
 
 (Click [here](../intro.md) to go back to the main page)
 
-<h2 id="what-is-packaging">
+##Table of Contents
+<h4>
+[What are Unlocked Packages?](#unlocked-pkgs)
+[What are the benefits of packaging over Change Sets and ANT Migration Tool?](pkg-benefits)
+[What are the different types of packages and which one should I use?](#pkg-types)
+</h4>
+
+<h2 id="unlocked-pkgs">
 What are Unlocked Packages?
 </h2>
 
@@ -27,7 +34,7 @@ It also helps to clarify what we mean by package and package version.
 
 A Package is a container for Salesforce metadata. You can add metadata to a package and take a snapshot of it any time. This snapshot is called a package version. You can create package versions any number of times. Each package version, once created, is immutable. You can install a package version in any Salesforce environment - scratch orgs, sandbox orgs, or production orgs. Installing a package version deploys the metadata that was specified when the package version was created.
 
-<h2 id="benefits-of-packaging">
+<h2 id="pkg-benefits">
 What are the benefits of packaging over Change Sets and ANT Migration Tool?
 </h2>
 
@@ -40,7 +47,7 @@ The following are some key benefits of packaging:
 5. Packages can be tracked in the installed org because they show up as installed packages with a set of associated metadata. In the production org, for a given metadata, you can view the package it is associated with, and for a given package, you can view the set of all metadata owned by the package. Whether it’s during staging or deployment, Packages ease the task of tracking what is part of an artifact compared to existing technologies like change sets.
 6. Packages provide a repeatable, scriptable and trackable way to manage change as you develop functionality using Salesforce DX.
 
-<h2 id="package-types">
+<h2 id="pkg-types">
 What are the different types of packages and which one should I use?
 </h2>
 
