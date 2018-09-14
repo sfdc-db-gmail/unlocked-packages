@@ -2,12 +2,14 @@
 
 (Click [here](../intro.md) to go back to the main page)
 
-##Table of Contents
-<h4>
+###Table of Contents
+
 [What are Unlocked Packages?](#unlocked-pkgs)
-[What are the benefits of packaging over Change Sets and ANT Migration Tool?](pkg-benefits)
+
+[What are the benefits of packaging over Change Sets and ANT Migration Tool?](#pkg-benefits)
+
 [What are the different types of packages and which one should I use?](#pkg-types)
-</h4>
+
 
 <h2 id="unlocked-pkgs">
 What are Unlocked Packages?
@@ -131,7 +133,7 @@ Congratulations! You have now created and installed your first unlocked package!
 
 
 <h3 id="organize-md">
-Q. How can I organize my unpackaged metadata using DCP?
+Q. How can I organize my unpackaged metadata using unlocked packages?
 </h3>
 **Step 1** - Extract a small set of unpackaged, self-contained metadata from your production org and convert it to Salesforce DX format using mdapi:retrieve and mdapi:convert commands.
 
