@@ -1,4 +1,5 @@
 # FAQ on Unlocked Packages
+## Please note that this is written in an informal style with statements being made about future features that may not be developed at all or developed in ways different from what's stated here. Also, despite our best attempts, we may not keep this FAQ in the updated state as features evolve. For official documentation, refer to Salesforce DX Developer Guide. Please think of the Safe Harbor statements when you go through this FAQ. 
 
 (Click [here](../intro.md) to go back to the main page)
 
@@ -74,9 +75,11 @@ Table of Contents
 
 [Q. How can I refactor my package?](#pkg-refactor)
 
-[Q. Will unlocked packages support ALL metadata in future?](#supported-md)
+[Q. What can be packaged in Unlocked Packages? Will unlocked packages support ALL metadata in future?](#supported-md)
 
 [Q. How can I secure my packages?](#pkg-security)
+
+## Please note that this is written in an informal style with statements being made about future features that may not be developed at all or developed in ways different from what's stated here. Also, despite our best attempts, we may not keep this FAQ in the updated state as features evolve. For official documentation, refer to Salesforce DX Developer Guide. Please think of the Safe Harbor statements when you go through this FAQ. 
 
 <h2 id="unlocked-pkgs">
 What are Unlocked Packages?
@@ -753,6 +756,17 @@ When it comes to unlocked packages, the source of truth is your version control 
 Q. What are package aliases and how do they work?
 </h2>
 
+In Summer '18 release, we made a set of improvements to enhance the usability of packaging commands in the SFDX CLI. As part of that, we introduced the concept of *aliases* to packages. Package aliases were developed to reduce the usage of package ids as the latter is non-intuitive.
+
+As most of you already know, aliases are used elsewhere in the CLI; for E.g.: alias for a scratch org. 
+
+With package aliases, the following changes were introduced, as aimed at improving the usability:
+1. When the `force:package:create` command runs successfully, a package alias is automatically created in the `packageAliases` section of sfdx-project.json. E.g: `"revenue-optimizer": "0HoB00000004CWDKA2"`. Here, the alias name (`revenue-optimizer`) is the name of the package supplied in the `name` attribute of `force:package:create` command and the `0Ho` id is the package id that it maps to.
+2. When the `force:package:version:create` command runs successfully within the `--wait` time specified, a package version lias is automatically created in the `packageAliases` section of sfdx-project.json. E.g: `"revenue-optimizer@0.1.0-4": "04tB00000006DewIAE"`. Here, the alias name (`revenue-optimizer@0.1.0-4`) is the name of the package supplied in the `name` attribute of `force:package:create` command and the version number appended in the `major.minor.patch-build` number format. The id is the package version id that it maps to.
+3. It is possible to manually add, modify or remove entries in the `packageAliases` section.
+4. Once aliases are set up like this, in the rest of sfdx-project.json, the aliases can be used instead of cryptic ids. This makes the sfdx-project.json much more readable.
+5. In packaging commands, the aliases can be used instead of ids. In flags like `--package` and `--packages`, there is an option to supply either the package alias or the suitable ids. Using the aliases approach makes commands and scripts intuitive and readable.
+
 <h2 id="branch">
 Q. What are "branch" and "tag" attributes in package version and how do they work?
 </h2>
@@ -761,22 +775,51 @@ Q. What are "branch" and "tag" attributes in package version and how do they wor
 Q. During a package upgrade, how are destructive changes handled?
 </h2>
 
+See [here](#pkg-upgrades) for more info.
+
 <h2 id="dep-pkg-install">
 Q. How can I automatically install dependent packages?
 </h2>
+Let's presume your package `pkgC` depends on package `pkgB` which in turn depends on `pkgA`. In the target org, we require packages of appropriate versions to be installed in this order: `pkgA`, `pkgB` and `pkgC`. 
+
+In Winter '19, we have made the process of installing dependent packages easier by surfacing info about dependent packages including the minimum version required and dependency order. You can use `force:data:soql:query` and run a statement like `SELECT Dependencies FROM SubscriberPackageVersion WHERE Id='04tB0000000NmnHIAS` to get dependency information in correct order. 
+
+See this in the product guide for more info.
 
 <h2 id="pkg-refactor">
 Q. How can I refactor my package?
 </h2>
 
+Let's suppose you have installed ver 1 of your unlocked package pkg1. As part of refactoring your App, you decide to move some metadata from pkg1 to a new package pkg2. 
+
+In Winter '19, you will refactor the package by following these steps:
+1. Identify the metadata that you want to move out of pkg1.
+2. Remove metadata identified in step 1 from pkg1 repo and create ver 2 of pkg1.
+3. Add the metadata identified in step 1 to a different DX folder / project / repo and create ver 1 of pkg2 using that metadata. You may add other metadata to complete pkg2.
+4. After proper testing and UAT, install ver 2 of pkg1 in the org where ver1 of pkg1 has been installed.
+5. Install ver1 of pkg2 in the same org.
+6. At the end of step 5, the metadata identified in step 1 would have migrated from pkg1 to pkg2.
+
+See here for more info.
+
 <h2 id="supported-md">
-Q. Will unlocked packages support ALL metadata in future?
+Q. What can be packaged in Unlocked Packages? Will unlocked packages support ALL metadata in future?
 </h2>
+
+The metadata coverage report (see here for more info) is the source of truth for metadata supported in unlocked packages. While the vision is to provide metadata API support for all Salesforce Metadata and enable anything to be packaged in an unlocked package, it is going to take a while to get there, and the metadata coverage report will track the progress.
+
+Currently, singletons (things that have only one instance of them in an org) like org settings and preferences are NOT packageable in unlocked packages. 
 
 <h2 id="pkg-security">
 Q. How can I secure my packages?
 </h2>
+You can secure your packages by setting an `installationkey` to your package versions. During the package installation process, you are challenged to supply the `installationkey` and failing to provide it will abort the installation process.
 
+You can set the `installationkey` in two ways:
+1. Provide the key to the `--installationkey` flag of the `force:package:version:create` command. If you choose to skip this security feature, you have to supply the `installationkeybypass` flag to the version create command. Not supplying either of these flags results in an error. This enforces a *security-by-default* mindset.
+2. You can set or change the key by providing the key to the `--installationkey` flag of `force:package:version:update` command.
+
+In future (safe harbor), we have plans to provide additional security mechanisms to enable enhanced security for your packages.
 
 
 <h2 id="pkg-info">
