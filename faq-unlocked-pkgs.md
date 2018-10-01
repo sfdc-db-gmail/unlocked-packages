@@ -1,7 +1,7 @@
 # FAQ on Unlocked Packages
 
 <span style="color:red">
-### Please note that this is written in an informal style with statements being made about future features that may not be developed at all or developed in ways different from what's stated here. Also, despite our best attempts, we may not keep this FAQ in the updated state as features evolve. For official documentation, refer to Salesforce DX Developer Guide. Please think of the Safe Harbor statements when you go through this FAQ.
+### Please note that this is written in an informal style with many future looking statements - these features may not be developed at all or they may be developed in ways very different from what's stated here. This is NOT the official product documentation - refer to <link the doc> for the official documentation. Also, despite best attempts, this FAQ may not stay in updated state as features evolve. Refer to the official documentation for up to date info.
 </span>
 
 (Click [here](../intro.md) to go back to the main page)
