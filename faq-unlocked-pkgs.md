@@ -165,7 +165,7 @@ If you are an ISV that develops and lists apps on AppExchange, here are our reco
 ([Back to the Table of Contents](#toc))
 
 <h2 id="hello-world">
-How do I build and deploy a new app using unlocked packages? What’s my Hello World App for unlocked packages?
+Q. How do I build and deploy a new app using unlocked packages? What’s my Hello World App for unlocked packages?
 </h2>
 
 In less than 5-10 minutes, you can build and test your Hello World App to get a feel for unlocked packages. The only precondition is that you have a Salesforce DX environment set up with Salesforce CLI and that you have enabled Dev Hub and Unlocked Packages in your Dev Hub Org. 
@@ -813,12 +813,6 @@ When it comes to unlocked packages, the source of truth is your version control 
 
 1. Use the `--tag` field in the `force:package:version:create` or `force:package:version:update` commands to store any vcs related tagging information (E.g.: commit info).
 2. Use version control system commits to tag the set of metadata that was associated with a particular successful package version creation. This way, your version control system knows the state of metadata for any given package version.
-
-([Back to the Table of Contents](#toc))
-
-<h2 id="release-md">
-Q. Can I dissociate some metadata from my package directly in an installed org?
-</h2>
 
 ([Back to the Table of Contents](#toc))
 
