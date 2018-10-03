@@ -81,7 +81,7 @@ Table of Contents
 What are Unlocked Packages?
 </h2>
 
-As part of Salesforce DX, with the Winter '19 release, **Unlocked Packages** is going to be *Generally Available*. Unlocked Packages is a new type of packaging solution that is being offered as part of Salesforce DX. This provides a package-based solution for metadata organization, deployment and distribution for enterprise customers.
+As part of Salesforce DX, with the Winter '19 release, **Unlocked Packages** is going to be *Generally Available*. Unlocked Packages is a new type of packaging solution that is being offered as part of Salesforce DX. It provides a package-based solution for metadata organization, deployment and distribution for enterprise customers building Apps on Salesforce Platform.
 
 Salesforce enterprise customers have historically used org-based deployment approaches like Changesets and ANT deployment to deploy metadata to their orgs. With Unlocked Packages, there is a package-based deployment unit that offers an alternative to Changesets and metadata deploys.
 
@@ -95,12 +95,12 @@ What are the benefits of packaging over Change Sets and ANT Migration Tool?
 
 The following are some key benefits of packaging:
 
-1. The metadata that you specify when you create a package version is the same metadata that is contained in your Salesforce DX project and version control system. Packages promote the source-driven development approach and use the source format that Salesforce DX uses.
+1. Packages promote a source-driven development approach and use the source format that Salesforce DX uses. The metadata that you specify when you build a package is the same metadata that is contained in your Salesforce DX project and version control system. 
 2. With package versions, you have an immutable, versionable artifact that can be used in CI, UAT, etc. The same artifact that passes all your CI tests and UAT can be installed in your production orgs.
-3. Packages promote modular development where you can organize your functionality into logical, modular, interdependent units, and use packaging for deployment and organization. You get all the good things that come with modular, iterative development practices.
+3. With a version-based approach, you can develop and install different package versions in target orgs and adopt a build-once, deploy-anywhere approach.
 4. You can express dependencies among packages. With this capability, you can embrace a modular approach where each package contains a set of metadata that represents a distinct unit of functionality, with well-defined dependencies among packages.
-5. Packages can be tracked in the installed org because they show up as installed packages with a set of associated metadata. In the production org, for a given metadata, you can view the package it is associated with, and for a given package, you can view the set of all metadata owned by the package. Whether it’s during staging or deployment, Packages ease the task of tracking what is part of an artifact compared to existing technologies like change sets.
-6. Packages provide a repeatable, scriptable and trackable way to manage change as you develop functionality using Salesforce DX.
+5. Packages can be tracked in an installed org as they show up as installed packages with a set of associated metadata. In a production org, for a given metadata, you can view the package it is associated with, and for a given package, you can view the set of all metadata owned by the package. Packages ease the task of tracking what is part of an artifact compared to existing technologies like change sets.
+6. Packages provide a repeatable, scriptable and trackable way for managing change as you develop functionality using Salesforce DX.
 
 ([Back to the Table of Contents](#toc))
 
@@ -120,7 +120,7 @@ Broadly speaking, the metadata in your production org can be categorized into th
 
 1. The set of metadata that Salesforce provides - such as  Sales Cloud, Service Cloud, etc. The Account object or the Case object falls under this category.
 2. Metadata that is part of AppExchange packages installed in the production org.
-3. Other metadata. This can be a Custom Field or Apex Trigger that you added to the Account object, the customizations that you made to an AppExchange app, or a brand new app that your team built in-house. This is the sum-total of all custom stuff that you have built over the years in your org. This category of metadata is referred to as **unpackaged metadata** in this FAQ.
+3. *The rest of the metadata*. This can be a Custom Field or Apex Trigger that you added to the Account object, the customizations that you made to an AppExchange app, or a brand new app that your team built in-house. This is the sum-total of all custom stuff that you have built over the years in your org. This category of metadata is referred to as **unpackaged metadata** in this FAQ.
 
 ([Back to the Table of Contents](#toc))
 
@@ -203,7 +203,7 @@ Note how the sfdx-project.json is automatically updated with information about t
 
 6. Install the package in the scratch org.  
 ```sfdx force:package:install --package Dreamhouse-app@0.1.0-1 --publishwait 20 --wait 10```  
-    If `Dreamhouse-app@0.1.0-1` is not the alias for the package version created in step 4, update the value for the `--package` flag with the correct alias.
+    If `Dreamhouse-app@0.1.0-1` is not the alias for the package version created in step 4, update the value for the `--package` flag with the correct alias. See [here](#pkg-alias) for more info about package aliases.
 
 7. Open the scratch org in the browser.  
 ```sfdx force:org:open```
@@ -247,7 +247,7 @@ Q. What are some of the common packaging operations?
 A package is a container of metadata. When you create a package, you specify some characteristic info about the package: name, description, metadata and namespace associated with it, package type and so on. 
 
 **Package Version Creation**  
-As your development team is working on some functionality, you, as a release manager, may want to take periodic snapshots of the functionality when it is in a functional state. Such snapshots are package versions. When the package version creation operation is executed, a copy of the current state of the metadata in the project folder (the directory specified in `force:package:create` command) is used to create the package version. You can create any number of package versions. Each version, once created, is immutable and can be installed in a Salesforce org.
+As your development team is working on some functionality, you, as a release manager, may want to take periodic snapshots of the functionality when it is in a functional state. Such snapshots are package versions. When the package version creation operation is executed, a copy of the current state of the metadata in the project folder (the directory specified in `force:package:create` command) is used to create the package version. You can create any number of package versions. Each version, once created, is immutable and can be installed in any Salesforce org.
 
 **Package Install**  
 A package install is an operation whereby the metadata of a package is deployed to the target org. A package install is actually a package version install - it is the deployment of metadata contained in a specific package version of a package. A package is typically associated with 100s or even 1,000s of package versions. When you install a package, you specify which one of the many versions you intend to install. *Install* and *deploy* mean the same in this context.
@@ -269,16 +269,16 @@ See [here](#pkg-cli-ops) for how you can perform these operations using the Sale
 Q. What are package aliases and how do they work?
 </h2>
 
-In Summer '18 release, we made a set of improvements to enhance the usability of packaging commands in the SFDX CLI. As part of that, we introduced the concept of *aliases* to packages. Package aliases were developed to reduce the usage of package ids as the latter is non-intuitive.
+In Summer '18 release, we made a set of improvements to enhance the usability of packaging commands in the Salesforce DX CLI. As part of that, we introduced the concept of *aliases* to packages. Package aliases were developed to reduce the usage of package ids as the latter is non-intuitive.
 
 As most of you already know, aliases are used elsewhere in the CLI; for E.g.: alias for a scratch org. 
 
 With package aliases, the following changes were introduced, all aimed at improving the usability of packaging commands:
-1. When the `force:package:create` command runs successfully, a package alias is automatically created in the *packageAliases* section of sfdx-project.json. E.g: `"revenue-optimizer": "0HoB00000004CWDKA2"`. Here, the alias name (revenue-optimizer) is the name of the package supplied in the `name` attribute of `force:package:create` command and the 0Ho id is the package id that it maps to.
+1. When the `force:package:create` command runs successfully, a package alias is automatically created in the *packageAliases* section of sfdx-project.json. E.g: `"revenue-optimizer": "0HoB00000004CWDKA2"`. Here, the alias name (revenue-optimizer) is the name of the package supplied in the `--name` attribute of `force:package:create` command and the 0Ho id is the package id that it maps to.
 2. When the `force:package:version:create` command runs successfully within the `--wait` time specified, a package version lias is automatically created in the packageAliases section of sfdx-project.json. E.g: `"revenue-optimizer@0.1.0-4": "04tB00000006DewIAE"`. Here, the alias name (revenue-optimizer@0.1.0-4) is the name of the package supplied in the `name` attribute of `force:package:create` command and the version number appended in the *major.minor.patch-build* number format. The id is the package version id that it maps to.
 3. It is possible to manually add, modify or remove entries in the packageAliases section.
 4. Once aliases are set up like this, in the rest of sfdx-project.json, the aliases can be used instead of cryptic ids. This makes the sfdx-project.json much more readable.
-5. In packaging commands, the aliases can be used instead of ids. In flags like `--package` and `--packages`, there is an option to supply either the package alias or the suitable ids. Using the aliases approach makes commands and scripts more intuitive and readable.
+5. In packaging commands, the aliases can be used instead of ids. In flags like `--package` and `--packages`, there is an option to supply either the package alias or the suitable ids. Using the aliases approach makes commands and scripts much more intuitive and readable.
 
 ([Back to the Table of Contents](#toc))
 
