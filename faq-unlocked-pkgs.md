@@ -1,9 +1,9 @@
 # FAQ on Unlocked Packages
-### By Dileep Burki (Last Modified on 10/3/2018)
+##### By Dileep Burki (Last Modified on 10/3/2018)
 
-### Please note that this is NOT the official documentation; it is written in an informal style with many future looking statements - these future-looking features may not be developed at all or they may be developed in ways very different from what's stated here. For the official product documentation please click [here](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm). Also, despite best attempts, this FAQ may not stay in updated state as features evolve. Refer to the official documentation for up-to-date info.
+#### Please note that this is NOT the official documentation; it is written in an informal style with many future looking statements - these future-looking features may not be developed at all or they may be developed in ways very different from what's stated here. For the official product documentation please click [here](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm). Also, despite best attempts, this FAQ may not stay in updated state as features evolve. Refer to the official documentation for up-to-date info.
 
-### If you have any comments or questions, please post them in the [Trailblazer Community](https://success.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F93A000000Lg5U) for Unlocked Packages
+##### If you have any comments or questions, please post them in the [Trailblazer Community](https://success.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F93A000000Lg5U) for Unlocked Packages
 
 <h1 id="toc">
 Table of Contents
