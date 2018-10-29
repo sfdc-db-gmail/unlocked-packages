@@ -1,7 +1,7 @@
 # FAQ on Unlocked Packages
-##### By Dileep Burki (Last Modified on 10/3/2018)
+##### By Dileep Burki (Last Modified on 10/29/2018)
 
-#### Please note that this is NOT the official documentation; it is written in an informal style with many future looking statements - these future-looking features may not be developed at all or they may be developed in ways very different from what's stated here. For the official product documentation please click [here](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm). Also, despite best attempts, this FAQ may not stay in updated state as features evolve. Refer to the official documentation for up-to-date info.
+#### Please note that this is NOT an official documentation; it is written in an informal style with many future looking statements - these future-looking features may not be developed at all or they may be developed in ways very different from what's stated here. For the official product documentation, please click [here](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm). Also, despite best attempts, this FAQ may not stay in updated state as features evolve. Refer to the official documentation for up-to-date info.
 
 ##### If you have any comments or questions, please post them in the [Trailblazer Community](https://success.salesforce.com/_ui/core/chatter/groups/GroupProfilePage?g=0F93A000000Lg5U) for Unlocked Packages
 
@@ -84,7 +84,7 @@ Table of Contents
 What are Unlocked Packages?
 </h2>
 
-As part of Salesforce DX, with the Winter '19 release, **Unlocked Packages** is going to be *Generally Available*. Unlocked Packages is a new type of packaging solution that is being offered as part of Salesforce DX. It provides a package-based solution for metadata organization, deployment and distribution for enterprise customers building Apps on Salesforce Platform.
+As part of Salesforce DX, with the Winter '19 release, **Unlocked Packages** is *Generally Available*. Unlocked Packages is a new type of packaging solution that is being offered as part of Salesforce DX. It provides a package-based solution for metadata organization, deployment and distribution for enterprise customers building Apps on Salesforce Platform.
 
 Salesforce enterprise customers have historically used org-based deployment approaches like Changesets and ANT deployment to deploy metadata to their orgs. With Unlocked Packages, there is a package-based deployment unit that offers an alternative to Changesets and metadata deploys.
 
@@ -100,18 +100,18 @@ The following are some key benefits of packaging:
 
 1. Packages promote a source-driven development approach and use the source format that Salesforce DX uses. The metadata that you specify when you build a package is the same metadata that is contained in your Salesforce DX project and version control system. 
 2. With package versions, you have an immutable, versionable artifact that can be used in CI, UAT, etc. The same artifact that passes all your CI tests and UAT can be installed in your production orgs.
-3. With a version-based approach, you can develop and install different package versions in target orgs and adopt a build-once, deploy-anywhere approach.
+3. With a version-based approach, you can develop and install different package versions in target orgs and adopt a build once, deploy anywhere approach.
 4. You can express dependencies among packages. With this capability, you can embrace a modular approach where each package contains a set of metadata that represents a distinct unit of functionality, with well-defined dependencies among packages.
-5. Packages can be tracked in an installed org as they show up as installed packages with a set of associated metadata. In a production org, for a given metadata, you can view the package it is associated with, and for a given package, you can view the set of all metadata owned by the package. Packages ease the task of tracking what is part of an artifact compared to existing technologies like change sets.
+5. Packages can be tracked in an installed org as they show up as installed packages with a set of associated metadata. In a production org, for a given metadata, you can view the package it is associated with, and for a given package, you can view the set of all metadata owned by the package.
 6. Packages provide a repeatable, scriptable and trackable way for managing change as you develop functionality using Salesforce DX.
 
 ([Back to the Table of Contents](#toc))
 
 <h2 id="pkg-pkgver">
-What is a "package" and what is a "package version"?
+What is a package and what is a package version?
 </h2>
 
-A **package** is a container for Salesforce metadata. It represents a distinct unit of functionality that is iterated over time. You can add metadata to a package and take a snapshot of it any time. This snapshot is called a **package version**. You can create package versions any number of times. Each package version, once created, is immutable and is associated with a single package. You can install a package version in any Salesforce environment - scratch orgs, sandbox orgs, or production orgs. Installing a package version deploys the metadata that was specified when the package version was created. 
+A **package** is a container for Salesforce metadata. It represents a distinct deployable unit of functionality that is iterated over time. You can add metadata to a package and take a snapshot of it, anytime. This snapshot is called a **package version**. You can create package versions any number of times. Each package version, once created, is immutable and is associated with a single package. You can install a package version in any Salesforce environment - scratch orgs, sandbox orgs, or production orgs. Installing a package version deploys the metadata that was specified when the package version was created. 
 
 ([Back to the Table of Contents](#toc))
 
@@ -123,7 +123,7 @@ Broadly speaking, the metadata in your production org can be categorized into th
 
 1. The set of metadata that Salesforce provides - such as  Sales Cloud, Service Cloud, etc. The Account object or the Case object falls under this category.
 2. Metadata that is part of AppExchange packages installed in the production org.
-3. *The rest of the metadata*. This can be a Custom Field or Apex Trigger that you added to the Account object, the customizations that you made to an AppExchange app, or a brand new app that your team built in-house. This is the sum-total of all custom stuff that you have built over the years in your org. This category of metadata is referred to as **unpackaged metadata** in this FAQ.
+3. *The rest of the metadata*. This can be a Custom Field or Apex Trigger that you added to the Account object, the customizations that you made to an AppExchange app, or a brand new app that your team built in-house. This is the sum total of all *custom stuff* that you have built over the years in your org. This category of metadata is referred to as **unpackaged metadata** in this FAQ.
 
 ([Back to the Table of Contents](#toc))
 
@@ -131,9 +131,9 @@ Broadly speaking, the metadata in your production org can be categorized into th
 What are the different types of packages and which one should I use?
 </h2>
 
-**In a sentence, if you are a customer or developing something for a customer, you will use unlocked packages; if you are an ISV partner that wishes to distribute your App on AppExchange, you will use managed packages. For more details, read on...**
+**If you are a customer or someone developing something for a specific customer, it is recommended that you use unlocked packages; if you are an ISV partner that wishes to distribute your App on AppExchange for a set of customers, managed packages is the recommended solution. For more details, read on...**
 
-You may have heard about many package-related terms - managed packages, Package 2, Developer-controlled packages, DCPs, unlocked packages, locked packages, unmanaged packages, second-generation packages... Let’s demystify these now. 
+You may have heard about many package-related terms - managed packages, Package 2, Developer-controlled packages, DCPs, unlocked packages, locked packages, unmanaged packages, Salesforce DX packages, second-generation packages... Let’s demystify these now. 
 
 
 **First-Generation Packaging**
@@ -144,13 +144,13 @@ Before Salesforce DX came along, we had two types of packages:
  - Managed packages geared towards Salesforce partners that build and list apps on AppExchange.
 
 
-**Second-Generation Packaging (aka Packaging 2 or Salesforce DX Packaging)**
+**Second-Generation Packaging**
 
-With Salesforce DX, we are launching Packaging 2 or Second-Generation Packages. We want packaging to work as well for customers as they do for partners.
+With Salesforce DX, we are launching Unlocked Packages and Managed second-generation packages (aka managed 2GPs). We want packaging to work as well for customers as they do for partners.
 
-Unlocked Packages are designed primarily to address the packaging needs of customers .Unlocked packages offer a super-set of features compared to unmanaged packages.
+Unlocked Packages are designed primarily to address the packaging needs of customers. Unlocked packages offer a super-set of features compared to unmanaged packages.
 
-Managed Second-generation packages (Managed 2GPs) are geared towards ISVs who want to develop and list apps on AppExchange. With Managed 2GPs being beta, there are certain key parity features (Push Upgrades, LMA, ability to list on AppExchange, patch versions, etc.) that are missing in them. So, if you are a Salesforce Partner, your best bet is to continue with First-Generation Managed Packages until we build those feature parity items in managed 2GPs.
+Managed 2GPs are geared towards ISVs who want to develop and list apps on AppExchange. While Managed 2GPs are beta, there are still certain key parity features (Push Upgrades, LMA, ability to list on AppExchange, patch versions, etc.) that are missing in them. So, if you are a Salesforce Partner, it is recommended that you continue with first-Generation Managed Packages until we build those feature parity items in managed 2GPs.
 
 ([Back to the Table of Contents](#toc))
 
@@ -160,9 +160,9 @@ Q. If I am an ISV, what type of packaging should I use?
 
 If you are an ISV that develops and lists apps on AppExchange, here are our recommendations (See [here](#pkg-types) for info about different types of packages):
 
-1. Continue to use first-generation managed packages (1GPs) for now when it comes to listing and distributing apps to customers.
+1. Continue to use first-generation managed packages (1GPs) when it comes to listing and distributing apps to customers.
 2. In upcoming releases, we are working on enabling the listing of second-generation packages (managed 2GPs) on AppExchange and building feature parity with first-generation managed packages - features like LMA and push upgrades. Until we can develop these features and launch managed second-generation packages as GA, we recommend that you continue with first-gen packages.
-3. You can definitely consider second-generation managed packages (managed 2GPs) during development cycle. You can build and test your metadata using scratch orgs and 2GPs and use 1GPs for final rounds of testing and building the official release candidate. This will help you take the benefits of managed 2GPs in development stages.
+3. You can definitely consider second-generation managed packages (managed 2GPs) during development cycle. You can build and test your metadata using scratch orgs and 2GPs and use 1GPs for final rounds of testing and building the official release candidate. This will enable you to adopt the benefits of managed 2GPs in development stages.
 4. Unlocked packages are designed primarily keeping customer use cases in mind. There could be scenarios where unlocked packages are helpful to ISVs as well. Familiarize yourself with what unlocked package can do and see if they map to some of your use cases.
 
 ([Back to the Table of Contents](#toc))
@@ -171,7 +171,7 @@ If you are an ISV that develops and lists apps on AppExchange, here are our reco
 Q. How do I build and deploy a new app using unlocked packages? What’s my Hello World App for unlocked packages?
 </h2>
 
-In less than 5-10 minutes, you can build and test your Hello World App to get a feel for unlocked packages. The only precondition is that you have a Salesforce DX environment set up with Salesforce CLI and that you have enabled Dev Hub and Unlocked Packages in your Dev Hub Org. 
+In less than 5-10 minutes, you can build and test your *Hello World App* to get a feel for unlocked packages. The only precondition is that you have a Salesforce DX environment set up with Salesforce CLI and that you have enabled Dev Hub and Unlocked Packages in your Dev Hub Org. 
 
 If you haven’t done it already, refer to this [documentation](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm) for setting up the Dev Hub and Packaging.
 
@@ -194,7 +194,7 @@ Follow these simple steps and you have for yourself a package!
 Note how the sfdx-project.json is automatically updated with information about this package.
 
 
-4. Create a package version. When you create a package version, you are associating metadata with your package. Over the course of time, you create many, many package versions for a given package. Once created, a package version serves as an immutable artifact containing a specific set of metadata. This is the same metadata that you specify at the package version creation step.   
+4. Create a package version. When you create a package version, you are associating metadata with your package. Over the course of time, you may create many package versions for a given package. Once created, a package version serves as an immutable artifact containing a specific set of metadata. This is the same metadata that you specify at the package version creation step.   
 ```sfdx force:package:version:create --package Dreamhouse-app --installationkey mypkgisnowsecure#%^ --wait 20```
 
     In this example, *force-app* is the directory in which your package metadata is located in Salesforce DX format. This was specified when the the `force:package:create` command was run in step # 3. The other pieces of information needed for package version creation are stored in sfdx-project.json. The installation key offers a security mechanism for your package version - this key has to be speicified while installing the package for the installation to be successful.
@@ -205,10 +205,10 @@ Note how the sfdx-project.json is automatically updated with information about t
 
 
 6. Install the package in the scratch org.  
-```sfdx force:package:install --package Dreamhouse-app@0.1.0-1 --publishwait 20 --wait 10```  
+```sfdx force:package:install --package Dreamhouse-app@0.1.0-1 --publishwait 20 --installationkey mypkgisnowsecure#%^ --wait 10```  
     If `Dreamhouse-app@0.1.0-1` is not the alias for the package version created in step 4, update the value for the `--package` flag with the correct alias. See [here](#pkg-alias) for more info about package aliases.
 
-7. Open the scratch org in the browser.  
+1. Open the scratch org in the browser.  
 ```sfdx force:org:open```
 
 
@@ -232,13 +232,13 @@ See [here](#unpackaged-md) for a quick overview of *unpackaged metadata*.
 
 How to identify this set of self-contained metadata is a bit of a science and a bit of an art. You can try and select metadata that represents an app, or customization to an AppExchange app, or customizations to Sales Cloud or an Account object, or some set of metadata that represents a functional unit (e.g.: a library of apex classes). We know this is a challenging task. We plan to produce material to help in this. See this [blog](https://developer.salesforce.com/blogs/2018/02/getting-started-salesforce-dx-part-1-5.html) series that talks about DX and unlocked packages.
 
-**Step 2** - Push this metadata to a scratch org using source:push and validate that this is the metadata that you want to be part of a new package. If you are missing some metadata, go back to Step 1.
+**Step 2** - Push this metadata to a scratch org using `force:source:push` and validate that this is the metadata that you want to be part of a new package. If you are missing some metadata, go back to Step 1.
 
 **Step 3** - Create an unlocked package using this metadata (see [here](#hello-world) for how to create a package). Make sure this package has no namespace (supply the `--nonamespace` flag to the `force:package:create` command). See [here](#namespace) for more info about namespaces and packages.
 
-**Step 4** - Test the package in CI and UAT environments. If you encounter issues, you may have to go back to Step 1 and validate that you have the right set of metadata. Once the package has passed all CI runs and UAT on sandboxes, install the package in the production org. This installation does NOT deploy new metadata as what’s contained in the package is already present in the production org. But what this does is “migrate” the metadata from the unpackaged set to the package so that it is now part of the package in the production org. From this point forward, you can iterate over this metadata set using the package.
+**Step 4** - Test the package in CI and UAT environments. If you encounter issues, you may have to go back to Step 1 and validate that you have the right set of metadata. Once the package has passed all CI runs and UAT on sandboxes, install the package in the production org. This installation does **not** deploy new metadata as what’s contained in the package is already present in the production org. But what this does is *migrate* the metadata from the unpackaged set to the package so that it is now part of the package in the production org. From this point forward, you can iterate over this metadata set using the package.
 
-These steps, along with the specification of dependencies among packages, can help in organizing all of the unpackaged metadata into a set of interdependent packages.
+These steps, along with the specification of dependencies among packages, can help in organizing the unpackaged metadata into a set of interdependent packages.
 
 ([Back to the Table of Contents](#toc))
 
@@ -247,7 +247,7 @@ Q. What are some of the common packaging operations?
 </h2>
 
 **Package Creation**  
-A package is a container of metadata. When you create a package, you specify some characteristic info about the package: name, description, metadata and namespace associated with it, package type and so on. 
+A package is a container of metadata. When you create a package, you specify some characteristic info about the package: name, description, namespace associated with it, package type and so on. 
 
 **Package Version Creation**  
 As your development team is working on some functionality, you, as a release manager, may want to take periodic snapshots of the functionality when it is in a functional state. Such snapshots are package versions. When the package version creation operation is executed, a copy of the current state of the metadata in the project folder (the directory specified in `force:package:create` command) is used to create the package version. You can create any number of package versions. Each version, once created, is immutable and can be installed in any Salesforce org.
@@ -278,10 +278,10 @@ As most of you already know, aliases are used elsewhere in the CLI; for E.g.: al
 
 With package aliases, the following changes were introduced, all aimed at improving the usability of packaging commands:
 1. When the `force:package:create` command runs successfully, a package alias is automatically created in the *packageAliases* section of sfdx-project.json. E.g: `"revenue-optimizer": "0HoB00000004CWDKA2"`. Here, the alias name (revenue-optimizer) is the name of the package supplied in the `--name` attribute of `force:package:create` command and the 0Ho id is the package id that it maps to.
-2. When the `force:package:version:create` command runs successfully within the `--wait` time specified, a package version lias is automatically created in the packageAliases section of sfdx-project.json. E.g: `"revenue-optimizer@0.1.0-4": "04tB00000006DewIAE"`. Here, the alias name (revenue-optimizer@0.1.0-4) is the name of the package supplied in the `name` attribute of `force:package:create` command and the version number appended in the *major.minor.patch-build* number format. The id is the package version id that it maps to.
+2. When the `force:package:version:create` command runs successfully within the `--wait` time specified, a package version alias is automatically created in the packageAliases section of sfdx-project.json. E.g: `"revenue-optimizer@0.1.0-4": "04tB00000006DewIAE"`. Here, the alias name (revenue-optimizer@0.1.0-4) is the name of the package supplied in the `name` attribute of `force:package:create` command and the version number appended in the *major.minor.patch-build* number format. The id is the package version id that it maps to.
 3. It is possible to manually add, modify or remove entries in the packageAliases section.
 4. Once aliases are set up like this, in the rest of sfdx-project.json, the aliases can be used instead of cryptic ids. This makes the sfdx-project.json much more readable.
-5. In packaging commands, the aliases can be used instead of ids. In flags like `--package` and `--packages`, there is an option to supply either the package alias or the suitable ids. Using the aliases approach makes commands and scripts much more intuitive and readable.
+5. In packaging commands, the aliases can be used instead of ids. In flags like `--package` and `--packages`, there is an option to supply either the package alias or the appropriate ids. Using the aliases approach makes the sfdx-project.json file, commands and scripts much more intuitive and readable.
 
 ([Back to the Table of Contents](#toc))
 
@@ -308,9 +308,9 @@ Obtain info about the status of a package version create request - `force:packag
 
 Obtain info about the status of all package version create requests - `force:package:version:create:list`
 
-Get a listing of all package versions - `force:package:version:list`
-
 Get detailed info about a single package version - `force:package:version:report`
+
+Get a listing of all package versions - `force:package:version:list`
 
 Update info about a package version - `force:package:version:update`
 
@@ -351,6 +351,7 @@ See this example below for a section of sfdx-project.json file
             "versionNumber": "0.1.0.NEXT",
             "versionName": "Summer 2018",
             "versionDescription": "Summer 2018 Release",
+            "definitionFile": "force-app"
         },
 
         {
@@ -380,6 +381,8 @@ path (required field) - root folder where the source metadata of the package is 
 versionName (required field) and versionNumber  (required field) - name and version number. The latter is in major.minor.patch.build format where each one of these is a whole number. See [here](#ver-num) for more info about package version numbers. This info is auto-populated in the sfdx-project.json when the `force:package:create` command executes successfully.
 
 versionDescription (optional field) - description of the package version that you’re creating.
+
+definitionFile (optional field) - this is a json file similar to the scratch org definition file that you can use to specify features and org settings that need to be enabled for the successful deployment of your package metadata. For E.g.: if your package metadata requires multi-currency to be enabled in the target org before the metadata can be successfully deployed, this feature should be specified in the json file. In many scenarios, you may want to use the *same* json file for both package version creation and scratch org creation.
 
 ([Back to the Table of Contents](#toc))
 
@@ -461,7 +464,7 @@ The above-described changes can be applied in a variety of ways (Setup UI in scr
 
 **Deployment Stage**
 
-Let’s presume you are trying to deploy (aka install) ver 2.0 of an unlocked package in an org where ver 1.0 is currently installed. During this package upgrade process, the following changes are applied:
+Let’s presume you are trying to install ver 2.0 of an unlocked package in an org where ver 1.0 is currently installed. During this package upgrade process, the following changes are applied:
 
 1. Metadata that is new in v2.0 in comparison to v1.0 are deployed or created in the target org.
 2. Metadata that has changed are applied. For example, if a Lightning Page or Apex Controller has been modified in v2.0, those modifications are applied as part of package upgrade.
@@ -481,7 +484,7 @@ Here are some things to keep in mind with respect to version numbers:
 1. You specify the version number in the `versionNumber` field in sfdx-project.json. This is a required field.
 2. You increment version numbers so you keep track of changes. You typically increment major number for major releases and minor number for minor releases. You can try and adopt some of the best practices associated with semantic versioning when you manage version numbers.
 3. With Winter '19 release, you can use patch numbers for patch releases. In the past, we required patch numbers to be 0; this limitation goes away with Winter '19 release.
-4. If your team is working on a specific release (E.g.: ver 3.5), you may find the process of updating build number laborious especially if you are using CI to create a lot of package versions. We recommend that you use the `NEXT` keyword to simplify this. When you specify `NEXT` as in `1.3.0.NEXT`, we auto-increment the build number for you. When you want to do the same with package dependencies, you can use `LATEST` in the dependencies section of sfdx-project.json file.
+4. If your team is working on a specific release (E.g.: ver 3.5), you may find the process of updating build number laborious especially if you are using CI to create a lot of package versions. We recommend that you use the `NEXT` keyword to simplify this. When you specify `NEXT` as in `1.3.0.NEXT`, we auto-increment the build number for you. When you want to do the same with package dependencies, you can use `LATEST` in the dependencies section of sfdx-project.json file. The `NEXT` and `LATEST` keywords currently work only with build numbers.
 
 ([Back to the Table of Contents](#toc))
 
@@ -526,7 +529,7 @@ Q. How can I refactor my package?
 
 Let's suppose you have installed ver 1 of your unlocked package pkg1. As part of refactoring your App, you decide to move some metadata from pkg1 to a new package pkg2. 
 
-In Winter '19, you will refactor the package by following these steps:
+You will refactor the package by following these steps:
 1. Identify the metadata that you want to move out of pkg1.
 2. Remove metadata identified in step 1 from pkg1 repo and create ver 2 of pkg1.
 3. Add the metadata identified in step 1 to a different DX folder / project / repo and create ver 1 of pkg2 using that metadata. You may add other metadata to complete pkg2.
@@ -794,7 +797,7 @@ Keep the following in mind when you think of namespaces and packages:
 3. Multiple packages can be associated with the same namespace.
 4. A given package can be associated with only one namespace.
 5. A package can be associated with a namespace only during package creation (`force:package:create`) and cannot be changed, once associated.
-6. One of the known issues with namespaced unlocked packages is that the Apex in such a package is hidden (in installed orgs) and the experience associated with debug logs is sub-optimal (as info in debug logs are obfuscated). It is on the roadmap to fix this so that Apex in namespaced unlocked packages is visible in installed orgs, but the earliest that can happen is Summer '19. If this is a concern, please use no-namespace unlocked packages.
+6. One of the known issues with namespaced unlocked packages is that the Apex in such a package is hidden (in installed orgs) and the experience associated with debug logs is sub-optimal (as info in debug logs are obfuscated). It is on the roadmap to fix this so that Apex in namespaced unlocked packages is visible in installed orgs, but the earliest that can happen is Summer '19. Until we fix this, it is recommended that you use no-namespace unlocked packages.
 
 ([Back to the Table of Contents](#toc))
 
