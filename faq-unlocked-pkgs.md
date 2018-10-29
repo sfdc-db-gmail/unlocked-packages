@@ -206,7 +206,7 @@ Note how the sfdx-project.json is automatically updated with information about t
 
 6. Install the package in the scratch org.  
 ```sfdx force:package:install --package Dreamhouse-App@0.1.0-1 --publishwait 20 --installationkey mypkgisnowsecure#%^ --wait 10```  
-    If `Dreamhouse-app@0.1.0-1` is not the alias for the package version created in step 4, update the value for the `--package` flag with the correct alias. See [here](#pkg-alias) for more info about package aliases.
+    If `Dreamhouse-App@0.1.0-1` is not the alias for the package version created in step 4, update the value for the `--package` flag with the correct alias. See [here](#pkg-alias) for more info about package aliases.
 
 1. Open the scratch org in the browser.  
 ```sfdx force:org:open```
@@ -477,7 +477,7 @@ Let’s presume you are trying to install ver 2.0 of an unlocked package in an o
 <h2 id="ver-num">
 Q. How do I work with Version Numbers?
 </h2>
-A package version is an immutable artifact that is a snapshot of a package with a specific set of metadata. A package version is created with a successful execution of the `force:package:version:create` command. Every package version (see [here](#unlocked-pkgs) for more info about package and package versions) you create has a unique version number. The version number is in the major.minor.patch.build number format where major, minor, patch and build are integers grater than or equal to zero.
+A package version is an immutable artifact that is a snapshot of a package with a specific set of metadata. A package version is created with a successful execution of the `force:package:version:create` command. Every package version you create has a unique version number. The version number is in the major.minor.patch.build number format where major, minor, patch and build are integers grater than or equal to zero.
 
 Here are some things to keep in mind with respect to version numbers:
 
@@ -513,13 +513,12 @@ Q. How can I remove metadata from my package?
 There are some related scenarios here:
 1. Delete metadata as it is not needed. For E.g.: as part of moving towards Lightning, you may be replacing Visualforce pages with Lightning. In such a scenario, you intend to delete the now-obsolete Visualforce pages when you ship the new version of the package with Lightning pages.
 2. Remove the metadata from the package as the package is being refactored, and the desire is to move the metadata from one package to another package.
-3. Remove the metadata *temporarily* from the package *directly* in an installed org as there are some issues. In this scenario, the intention is to *release* the metadata from the package and make it part of unpackaged metadata in the org.
+3. Remove the metadata *temporarily* from the package *directly* in an installed org as there are some issues. In this scenario, the intention is to *release* the metadata from the package and make it part of unpackaged metadata in the org. Currently, this can only be done via UI in installed org (in Installed Packages detail page) for no-namespace, unlocked packages by clicking on the "Remove" link next to the metadata in Package Components section. 
    
 For scenarios 1 and 2, you delete the metadata from the DX project and build a new version of the package. When you install the new version in an org, the changes are applied. See [here](#pkg-upgrades) for more details.
 For scenario 3, you do the same if you determine that you want to permanently remove the metadata from the package.
 
 See [here](#pkg-refactor) for more information about scenario 2.
-See [here](#release-md) for more informantion about scenario 3.
 
 ([Back to the Table of Contents](#toc))
 
@@ -762,7 +761,7 @@ Q. How can I automatically install dependent packages?
 </h2>
 Let's presume your package pkgC depends on package pkgB which in turn depends on pkgA. In the target org, we require packages of appropriate versions to be installed in this order: pkgA, pkgB and pkgC. 
 
-In Winter '19, we have made the process of installing dependent packages easier by surfacing info about dependent packages including the minimum version required and dependency order. You can use `force:data:soql:query` and run a statement like `SELECT Dependencies FROM SubscriberPackageVersion WHERE Id='04tB0000000NmnHIAS` to get dependency information in correct order. 
+In Winter '19, we have made the process of installing dependent packages easier by surfacing info about dependent packages including the minimum version required and dependency order. You can use `force:data:soql:query` and run a statement like `SELECT Dependencies FROM SubscriberPackageVersion WHERE Id='04tB0000000NmnHIAS` to get dependency information in correct order. In this example, `04tB0000000NmnHIAS` is the package version id of pkgC.
 
 See [this](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_extract_dependency_info.htm) in the product guide for more info.
 
@@ -797,7 +796,7 @@ Keep the following in mind when you think of namespaces and packages:
 3. Multiple packages can be associated with the same namespace.
 4. A given package can be associated with only one namespace.
 5. A package can be associated with a namespace only during package creation (`force:package:create`) and cannot be changed, once associated.
-6. One of the known issues with namespaced unlocked packages is that the Apex in such a package is hidden (in installed orgs) and the experience associated with debug logs is sub-optimal (as info in debug logs are obfuscated). It is on the roadmap to fix this so that Apex in namespaced unlocked packages is visible in installed orgs, but the earliest that can happen is Summer '19. Until we fix this, it is recommended that you use no-namespace unlocked packages.
+6. One of the known issues with namespaced unlocked packages is that the Apex in such a package is hidden (in installed orgs) and the experience associated with debug logs is sub-optimal (as info in debug logs are obfuscated). It is on the roadmap to fix this so that Apex in namespaced unlocked packages is visible in installed orgs, but the earliest that can happen is Summer '19. Until we fix this, it is recommended that you use no-namespace unlocked packages. Another known issue is the inability to remove a metadata from a package *directly* in the installed org (see [here](#remove-md) for more info). 
 
 ([Back to the Table of Contents](#toc))
 
@@ -857,7 +856,5 @@ We have lots of additional information that goes into the details of how to work
 [Trailhead Module on Unlocked Packages](https://trailhead.salesforce.com/trails/sfdx_get_started/modules/unlocked-packages-for-customers)
 
 [Trailhead Module on Quickstart: Unlocked Packages](https://trailhead.salesforce.com/trails/sfdx_get_started/projects/quick-start-unlocked-packages)
-
-[TrialheaDX 2018 session on Architecting using Unlocked Packages](https://developer.salesforce.com/trailheadx/sessions?q=a2q3A000001pyMZQAY#march-29)
 
 ([Back to the Table of Contents](#toc))
