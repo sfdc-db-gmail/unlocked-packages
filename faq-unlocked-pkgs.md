@@ -195,7 +195,7 @@ Note how the sfdx-project.json is automatically updated with information about t
 
 
 4. Create a package version. When you create a package version, you are associating metadata with your package. Over the course of time, you may create many package versions for a given package. Once created, a package version serves as an immutable artifact containing a specific set of metadata. This is the same metadata that you specify at the package version creation step.   
-```sfdx force:package:version:create --package Dreamhouse-app --installationkey mypkgisnowsecure#%^ --wait 20```
+```sfdx force:package:version:create --package Dreamhouse-App --installationkey mypkgisnowsecure#%^ --wait 20```
 
     In this example, *force-app* is the directory in which your package metadata is located in Salesforce DX format. This was specified when the the `force:package:create` command was run in step # 3. The other pieces of information needed for package version creation are stored in sfdx-project.json. The installation key offers a security mechanism for your package version - this key has to be speicified while installing the package for the installation to be successful.
 
@@ -205,7 +205,7 @@ Note how the sfdx-project.json is automatically updated with information about t
 
 
 6. Install the package in the scratch org.  
-```sfdx force:package:install --package Dreamhouse-app@0.1.0-1 --publishwait 20 --installationkey mypkgisnowsecure#%^ --wait 10```  
+```sfdx force:package:install --package Dreamhouse-App@0.1.0-1 --publishwait 20 --installationkey mypkgisnowsecure#%^ --wait 10```  
     If `Dreamhouse-app@0.1.0-1` is not the alias for the package version created in step 4, update the value for the `--package` flag with the correct alias. See [here](#pkg-alias) for more info about package aliases.
 
 1. Open the scratch org in the browser.  
